@@ -6,6 +6,8 @@ import (
 	"testing"
 
 	crand "crypto/rand"
+
+	"github.com/mgutz/ansi"
 )
 
 func TestListOfStringsInput(t *testing.T) {
@@ -336,5 +338,25 @@ func TestMergeConfig(t *testing.T) {
 				t.Fatalf("\nexpect:\n%#v\n\nactual:\n%#v", tc.expect, m)
 			}
 		})
+	}
+}
+
+func TestAnsi(t *testing.T) {
+	c := ansi.ColorFunc("blue")
+	input := []string{
+		"Column A | Column B | Column C",
+		"x | y | z",
+		"x2| y | z",
+	}
+
+	config := DefaultConfig()
+	output := Format(input, config)
+
+	expected := "Column A  Column B  Column C\n"
+	expected += "x         y         z\n"
+	expected += c("x2 ") + "        y         z"
+
+	if output != expected {
+		t.Fatalf("\nexpected:\n%s\n\ngot:\n%s", expected, output)
 	}
 }

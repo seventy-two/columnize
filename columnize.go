@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"fmt"
 	"strings"
+
+	"github.com/acarl005/stripansi"
 )
 
 // Config can be used to tune certain parameters which affect the way
@@ -126,6 +128,7 @@ func widthsFromLines(config *Config, lines []string) []int {
 	widths := make([]int, 0, 8)
 
 	for _, line := range lines {
+		line = stripansi.Strip(line)
 		elems := elementsFromLine(config, line)
 		for i := 0; i < len(elems); i++ {
 			l := runeLen(elems[i].(string))
@@ -136,6 +139,7 @@ func widthsFromLines(config *Config, lines []string) []int {
 			}
 		}
 	}
+	fmt.Println(widths)
 	return widths
 }
 
